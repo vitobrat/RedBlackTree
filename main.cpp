@@ -62,6 +62,7 @@ public:
     // Основные функции
     void insert(int value);
     void remove(int value);
+    Node * search(int value);
     void printTree();
     void cleanTree(Node* node);
 };
@@ -117,7 +118,7 @@ void RedBlackTree::fixViolation(Node* newNode) {
         parent = newNode->parent;
         grandparent = parent->parent;
 
-        // Случай A: Родитель узла является левым дочерним узлом дедушки
+        // Случай A: Родитель узла левый для деда
         if (parent == grandparent->left) {
             Node* uncle = grandparent->right;
 
@@ -141,7 +142,7 @@ void RedBlackTree::fixViolation(Node* newNode) {
                 newNode = parent;
             }
         }
-            // Случай B: Родитель узла является правым дочерним узлом дедушки
+            // Случай B: Родитель узла правый для деда
         else {
             Node* uncle = grandparent->left;
 
@@ -170,43 +171,102 @@ void RedBlackTree::fixViolation(Node* newNode) {
     root->color = BLACK;
 }
 
-// Удаление узла из красно-черного дерева
 void RedBlackTree::deleteNode(Node* node) {
-    Node* x = nullptr;
-    Node* y = nullptr;
+    Node* deleteNode = nullptr;
+    if (node->left != nullptr && node->right != nullptr){
+        Node* help = findMinimum(node->right);
+        swap(node->data, help->data);
+        node = help;
+        if(node->left != nullptr){
+            if(node == root) {
+                root = node->left;
+                deleteNode = node;
+                node->left->color = BLACK;
+                node->left->parent = nullptr;
+            } else{
+                deleteNode = node;
+                node->left->parent = node->parent;
+                node->left->color = BLACK;
+                if(node == node->parent->left) node->parent->left = node->left;
+                else node->parent->right = node->left;
+            }
 
-    if (node->left == nullptr || node->right == nullptr)
-        y = node;
-    else
-        y = findMinimum(node->right);
+        }else if(node->right != nullptr){
+            if(node == root) {
+                root = node->right;
+                deleteNode = node;
+                node->right->color = BLACK;
+                node->right->parent = nullptr;
+            } else{
+                deleteNode = node;
+                node->right->parent = node->parent;
+                node->right->color = BLACK;
+                if(node == node->parent->right) node->parent->right = node->right;
+                else node->parent->left = node->right;
+            }
+        }else{
+            if(node == root) {
+                root = nullptr;
+                delete node;
+                return;
+            }
+            if(node->color == BLACK){
+                fixDoubleBlack(node);
+            }
+            if(node == node->parent->right) node->parent->right = nullptr;
+            else node->parent->left = nullptr;
+            deleteNode = node;
+        }
+    }else{
+        if(node->left != nullptr){
+            if(node == root) {
+                root = node->left;
+                deleteNode = node;
+                node->left->color = BLACK;
+                node->left->parent = nullptr;
+            } else{
+                deleteNode = node;
+                node->left->parent = node->parent;
+                node->left->color = BLACK;
+                if(node == node->parent->left) node->parent->left = node->left;
+                else node->parent->right = node->left;
+            }
 
-    if (y->left != nullptr)
-        x = y->left;
-    else
-        x = y->right;
-
-    if (x != nullptr)
-        x->parent = y->parent;
-
-    if (y->parent == nullptr)
-        root = x;
-    else if (y == y->parent->left)
-        y->parent->left = x;
-    else
-        y->parent->right = x;
-
-    if (y != node)
-        node->data = y->data;
-
-    if (y->color == BLACK)
-        fixDoubleBlack(x);
-
-    delete y;
+        }else if(node->right != nullptr){
+            if(node == root) {
+                root = node->right;
+                deleteNode = node;
+                node->right->color = BLACK;
+                node->right->parent = nullptr;
+            } else{
+                deleteNode = node;
+                node->right->parent = node->parent;
+                node->right->color = BLACK;
+                if(node == node->parent->right) node->parent->right = node->right;
+                else node->parent->left = node->right;
+            }
+        }else{
+            if(node == root) {
+                root = nullptr;
+                delete node;
+                return;
+            }
+            if(node->color == BLACK){
+                fixDoubleBlack(node);
+            }
+            if(node == node->parent->right) node->parent->right = nullptr;
+            else node->parent->left = nullptr;
+            deleteNode = node;
+        }
+    }
+    delete deleteNode;
 }
+
+
 
 // Функция для исправления случая двойного черного узла
 void RedBlackTree::fixDoubleBlack(Node* x) {
-    if (x == nullptr || x == root )
+    if (x == nullptr || x == root)
         return;
 
     Node* sibling = nullptr;
@@ -237,7 +297,7 @@ void RedBlackTree::fixDoubleBlack(Node* x) {
             sibling = (isLeftChild) ? x->parent->right : x->parent->left;
         }
 
-        // Случай 2: Оба дети брата являются черными
+        // Случай 2: Оба ребенка брата являются черными
         if ((sibling->left == nullptr || sibling->left->color == BLACK) &&
             (sibling->right == nullptr || sibling->right->color == BLACK)) {
             sibling->color = RED;
@@ -282,7 +342,23 @@ void RedBlackTree::fixDoubleBlack(Node* x) {
 
     if (x != nullptr)
         x->color = BLACK;
+
+    // Дополнительный случай: Отец и брат черные, и у брата нет черных детей
+    if (x != nullptr && x->parent != nullptr) {
+        Node* parent = x->parent;
+        sibling = (parent->left == x) ? parent->right : parent->left;
+
+        if (sibling != nullptr && sibling->color == BLACK &&
+            ((sibling->left == nullptr || sibling->left->color == BLACK) &&
+             (sibling->right == nullptr || sibling->right->color == BLACK))) {
+            fixDoubleBlack(parent);
+        }
+    }
 }
+
+
+
+
 
 // Поиск минимального элемента в поддереве с корнем node
 Node* RedBlackTree::findMinimum(Node* node) {
@@ -328,10 +404,9 @@ void RedBlackTree::insert(int value) {
     }
 }
 
-// Удаление элемента из красно-черного дерева
-void RedBlackTree::remove(int value) {
+Node* RedBlackTree::search(int value) {
     if (root == nullptr)
-        return;
+        return nullptr;
 
     Node* node = root;
 
@@ -341,9 +416,16 @@ void RedBlackTree::remove(int value) {
         else if (value > node->data)
             node = node->right;
         else {
-            deleteNode(node);
-            return;
+            return node;
         }
+    }
+}
+
+// Удаление элемента из красно-черного дерева
+void RedBlackTree::remove(int value) {
+    Node* node = search(value);
+    if(node){
+        deleteNode(node);
     }
 }
 

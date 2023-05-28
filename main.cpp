@@ -52,20 +52,22 @@ private:
     Node* findMinimum(Node* node);
     std::string getColorString(Color color);
     void inorderHelper(Node* node, std::stringstream& ss, std::string indent, bool last);
-
 public:
-    RedBlackTree() : root(nullptr) {}
-    Node* getRoot(){
-        return root;
-    }
 
+    RedBlackTree() : root(nullptr) {}
+    Node* getRoot();
     // Основные функции
     void insert(int value);
     void remove(int value);
     Node * search(int value);
-    void printTree();
+    void printTree(ofstream& output);
     void cleanTree(Node* node);
+    void action(string str, int type, ofstream& output_key, ofstream& output_ans);
 };
+
+Node* RedBlackTree::getRoot(){
+    return root;
+}
 
 // Левый поворот вокруг узла x
 void RedBlackTree::leftRotate(Node* x) {
@@ -419,6 +421,7 @@ Node* RedBlackTree::search(int value) {
             return node;
         }
     }
+    return nullptr;
 }
 
 // Удаление элемента из красно-черного дерева
@@ -459,10 +462,10 @@ std::string RedBlackTree::getColorString(Color color) {
 }
 
 // Публичная функция для выполнения красивого вывода дерева
-void RedBlackTree::printTree() {
+void RedBlackTree::printTree(ofstream& output) {
     std::stringstream ss;
     inorderHelper(root, ss, "", true);
-    std::cout << ss.str() << std::endl;
+    output << ss.str();
 }
 
 
@@ -471,45 +474,92 @@ void RedBlackTree::cleanTree(Node* node) {
         return;
     cleanTree(node->left);
     cleanTree(node->right);
+    if(node == root) root = nullptr;
     delete node;
 }
 
-// Пример использования
-int main() {
-    RedBlackTree tree;
-    cout << "Input list: \n";
-    string stringList;
-    getline(cin, stringList);
-    istringstream iss(stringList);
-    int num;
-    while (iss >> num) {
-        tree.insert(num);
-    }
-    tree.printTree();
-    cout << "\n" << "----------------------------------------------------------------------" << "\n";
-    int type = 1;
-    while(type) {
-        cout << "1)Insert\n"
-                "2)Delete\n"
-                "0)exit\n";
-        type = checkInput();
-        if(type == 0) break;
-        int k = checkInput();
-        switch (type){
+void RedBlackTree::action(string str, int type, ofstream& output_key, ofstream& output_ans){
+    istringstream iss(str); int k;
+    while (iss >> k) {
+        switch (type) {
+            case 0:
             case 1:
-                tree.insert(k);
+                this->insert(k);
                 break;
             case 2:
-                tree.remove(k);
+                if (!this->search(k)) output_key << k << " is not exist!\n";
+                else{
+                    this->remove(k);
+                }
+                break;
+            case 3:
+                if (this->search(k)) output_ans << k << " exist; ";
+                else output_ans << k << " not exist; ";
                 break;
             default:
-                cout << "Error input!";
+                output_key << "Error input!";
         }
-        cout << "\n";
-        tree.printTree();
-        cout << "\n" << "----------------------------------------------------------------------" << "\n";
+        output_key << type <<":\n";
+        printTree(output_key);
     }
-    tree.cleanTree(tree.getRoot());
+    output_ans << "\n";
+    switch (type) {
+        case 0:
+            output_ans << "Tree after creation:\n";
+            break;
+        case 1:
+            output_ans << "Tree after add elements:\n";
+            break;
+        case 2:
+            output_ans << "Tree after delete elements:\n";
+            break;
+        case 3:
+            output_ans << "Final result:\n";
+            break;
+    }
+    printTree(output_ans);
+}
+
+int main() {
+    RedBlackTree tree;
+    ifstream input_task("C:\\FirstCursProgramm\\C++\\RedBlackTree\\input_task.txt");
+    ofstream output_key("C:\\FirstCursProgramm\\C++\\RedBlackTree\\output_key.txt");
+    ofstream output_ans("C:\\FirstCursProgramm\\C++\\RedBlackTree\\output_ans.txt");
+    if (input_task.is_open() && output_ans.is_open() && output_key.is_open()) {
+        string line, creatLine, deleteLine, addLine, searchLine;
+        for(int i = 0; i < 5; i++) getline(input_task, line);
+        while (getline(input_task, line)) {
+            getline(input_task, creatLine);
+            getline(input_task, deleteLine);
+            getline(input_task, addLine);
+            getline(input_task, searchLine);
+            auto start = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            tree.action(creatLine, 0, output_key, output_ans);
+            auto end = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            output_key << "time spent to creat tree in nanoseconds: " << end - start << "ns\n";
+            start = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            tree.action(deleteLine, 2, output_key, output_ans);
+            end = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            output_key << "time spent to delete elements tree in nanoseconds: " << end - start << "ns\n";
+            start = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            tree.action(addLine, 1, output_key, output_ans);
+            end = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            output_key << "time spent to add elements tree in nanoseconds: " << end - start << "ns\n";
+            start = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            tree.action(searchLine, 3, output_key, output_ans);
+            end = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            output_key << "time spent to search elements tree in nanoseconds: " << end - start << "ns\n";
+            output_ans << "----------------------------";
+            output_key << "----------------------------";
+            tree.cleanTree(tree.getRoot());
+
+        }
+        input_task.close();
+        output_ans.close();
+        output_key.close();
+    } else {
+        std::cout << "Could not open the file!!!" << std::endl;
+    }
     getchar();
     return 0;
 }

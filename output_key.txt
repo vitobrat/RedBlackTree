@@ -52,7 +52,7 @@
             /--[B] 3
       \--[R] 2
             \--[B] 1
-time spent to creat tree in nanoseconds: 65000ns
+time spent to creat tree in nanoseconds: 65600ns
 2:
             /--[B] 9
       /--[R] 8
@@ -77,7 +77,7 @@ time spent to creat tree in nanoseconds: 65000ns
             /--[B] 3
       \--[R] 2
             \--[B] 1
-time spent to delete elements tree in nanoseconds: 9100ns
+time spent to delete elements tree in nanoseconds: 9200ns
 1:
             /--[R] 10
       /--[B] 9
@@ -105,7 +105,7 @@ time spent to delete elements tree in nanoseconds: 9100ns
             |      \--[R] 3
       \--[R] 2
             \--[B] 1
-time spent to add elements tree in nanoseconds: 9300ns
+time spent to add elements tree in nanoseconds: 9000ns
 3:
             /--[R] 10
       /--[B] 9
@@ -136,7 +136,7 @@ time spent to add elements tree in nanoseconds: 9300ns
             |      \--[R] 3
       \--[R] 2
             \--[B] 1
-time spent to search elements tree in nanoseconds: 9000ns
+time spent to search elements tree in nanoseconds: 9300ns
 ----------------------------0:
 \--[B] 10
 0:
@@ -202,7 +202,7 @@ time spent to search elements tree in nanoseconds: 9000ns
             \--[R] 12
                         /--[R] 11
                   \--[B] 10
-time spent to creat tree in nanoseconds: 20400ns
+time spent to creat tree in nanoseconds: 19800ns
 2:
             /--[B] 19
       /--[B] 18
@@ -222,7 +222,7 @@ time spent to creat tree in nanoseconds: 20400ns
       \--[R] 12
                   /--[R] 11
             \--[B] 10
-time spent to delete elements tree in nanoseconds: 7100ns
+time spent to delete elements tree in nanoseconds: 6800ns
 1:
             /--[R] 100
       /--[B] 19
@@ -233,7 +233,7 @@ time spent to delete elements tree in nanoseconds: 7100ns
       \--[R] 12
                   /--[R] 11
             \--[B] 10
-time spent to add elements tree in nanoseconds: 84100ns
+time spent to add elements tree in nanoseconds: 72300ns
 3:
             /--[R] 100
       /--[B] 19
@@ -254,7 +254,7 @@ time spent to add elements tree in nanoseconds: 84100ns
       \--[R] 12
                   /--[R] 11
             \--[B] 10
-time spent to search elements tree in nanoseconds: 7400ns
+time spent to search elements tree in nanoseconds: 7300ns
 ----------------------------0:
 \--[B] 100
 0:
@@ -290,7 +290,7 @@ time spent to search elements tree in nanoseconds: 7400ns
             /--[R] 33
       \--[B] 27
             \--[R] 10
-time spent to creat tree in nanoseconds: 12800ns
+time spent to creat tree in nanoseconds: 12500ns
 99 is not exist!
 2:
             /--[R] 100
@@ -307,7 +307,7 @@ time spent to creat tree in nanoseconds: 12800ns
 \--[B] 50
             /--[R] 33
       \--[B] 27
-time spent to delete elements tree in nanoseconds: 5700ns
+time spent to delete elements tree in nanoseconds: 5600ns
 1:
                   /--[R] 2372
             /--[B] 100
@@ -316,7 +316,7 @@ time spent to delete elements tree in nanoseconds: 5700ns
 \--[B] 50
             /--[R] 33
       \--[B] 27
-time spent to add elements tree in nanoseconds: 4700ns
+time spent to add elements tree in nanoseconds: 4200ns
 3:
                   /--[R] 2372
             /--[B] 100
@@ -333,7 +333,7 @@ time spent to add elements tree in nanoseconds: 4700ns
 \--[B] 50
             /--[R] 33
       \--[B] 27
-time spent to search elements tree in nanoseconds: 6000ns
+time spent to search elements tree in nanoseconds: 5700ns
 ----------------------------0:
 \--[B] 10
 0:
@@ -369,7 +369,7 @@ time spent to search elements tree in nanoseconds: 6000ns
             |      \--[R] -2
       \--[R] -5
             \--[B] -10
-time spent to creat tree in nanoseconds: 15000ns
+time spent to creat tree in nanoseconds: 14900ns
 2:
             /--[B] 10
             |      \--[R] 2
@@ -383,7 +383,7 @@ time spent to creat tree in nanoseconds: 15000ns
       |      \--[B] 0
 \--[B] -2
       \--[B] -10
-time spent to delete elements tree in nanoseconds: 6400ns
+time spent to delete elements tree in nanoseconds: 8400ns
 1:
             /--[B] 10
             |      \--[R] 7
@@ -399,7 +399,7 @@ time spent to delete elements tree in nanoseconds: 6400ns
 \--[B] -2
             /--[R] -7
       \--[B] -10
-time spent to add elements tree in nanoseconds: 6000ns
+time spent to add elements tree in nanoseconds: 5800ns
 3:
             /--[B] 10
             |      \--[R] 7
@@ -416,7 +416,7 @@ time spent to add elements tree in nanoseconds: 6000ns
 \--[B] -2
             /--[R] -7
       \--[B] -10
-time spent to search elements tree in nanoseconds: 6100ns
+time spent to search elements tree in nanoseconds: 6000ns
 ----------------------------0:
 \--[B] 1000
 0:
@@ -444,7 +444,7 @@ time spent to search elements tree in nanoseconds: 6100ns
             /--[R] 1000
       \--[B] 999
             \--[R] 567
-time spent to creat tree in nanoseconds: 12000ns
+time spent to creat tree in nanoseconds: 10200ns
 888 is not exist!
 2:
             /--[R] 8333
@@ -467,15 +467,15 @@ time spent to creat tree in nanoseconds: 12000ns
 \--[B] 1001
       \--[B] 1000
             \--[R] 567
-time spent to delete elements tree in nanoseconds: 38300ns
-time spent to add elements tree in nanoseconds: 1700ns
+time spent to delete elements tree in nanoseconds: 31100ns
+time spent to add elements tree in nanoseconds: 1800ns
 3:
             /--[R] 8333
       /--[B] 1005
 \--[B] 1001
       \--[B] 1000
             \--[R] 567
-time spent to search elements tree in nanoseconds: 3100ns
+time spent to search elements tree in nanoseconds: 3200ns
 ----------------------------0:
 \--[B] 2372
 0:
@@ -503,14 +503,14 @@ time spent to search elements tree in nanoseconds: 3100ns
       |      \--[B] 2374
 \--[B] 2373
       \--[B] 2372
-time spent to creat tree in nanoseconds: 9700ns
+time spent to creat tree in nanoseconds: 10300ns
 2:
             /--[R] 2395
       /--[B] 2376
 \--[B] 2375
             /--[R] 2374
       \--[B] 2373
-time spent to delete elements tree in nanoseconds: 3400ns
+time spent to delete elements tree in nanoseconds: 3500ns
 1:
             /--[R] 2395
       /--[B] 2376
@@ -518,7 +518,7 @@ time spent to delete elements tree in nanoseconds: 3400ns
             /--[R] 2374
       \--[B] 2373
             \--[R] 2372
-time spent to add elements tree in nanoseconds: 3500ns
+time spent to add elements tree in nanoseconds: 3900ns
 3:
             /--[R] 2395
       /--[B] 2376
@@ -526,7 +526,7 @@ time spent to add elements tree in nanoseconds: 3500ns
             /--[R] 2374
       \--[B] 2373
             \--[R] 2372
-time spent to search elements tree in nanoseconds: 71600ns
+time spent to search elements tree in nanoseconds: 36100ns
 ----------------------------0:
 \--[B] 555
 0:
@@ -581,7 +581,7 @@ time spent to search elements tree in nanoseconds: 71600ns
       \--[R] 333
             \--[B] 222
                   \--[R] 111
-time spent to creat tree in nanoseconds: 18300ns
+time spent to creat tree in nanoseconds: 17800ns
 2:
             /--[B] 999
       /--[R] 888
@@ -612,7 +612,7 @@ time spent to delete elements tree in nanoseconds: 6400ns
       \--[R] 333
             \--[B] 222
                   \--[R] 111
-time spent to add elements tree in nanoseconds: 4900ns
+time spent to add elements tree in nanoseconds: 4700ns
 3:
             /--[B] 999
       /--[R] 888
@@ -623,5 +623,5 @@ time spent to add elements tree in nanoseconds: 4900ns
       \--[R] 333
             \--[B] 222
                   \--[R] 111
-time spent to search elements tree in nanoseconds: 4600ns
+time spent to search elements tree in nanoseconds: 4700ns
 ----------------------------

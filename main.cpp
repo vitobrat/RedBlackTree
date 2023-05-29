@@ -1,27 +1,10 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <iomanip>
 #include <fstream>
 #include <chrono>
 
 using namespace std;
-
-int checkInput(){
-    int input;
-    try {
-        cin >> input;
-        if (cin.fail()) {
-            throw 1;
-        }
-    } catch (int exception) {
-        cout << "ERROR!!!";
-        exit(0);
-    }
-    cin.sync();
-    cout << "\n";
-    return input;
-}
 
 enum Color {
     RED,
@@ -34,7 +17,6 @@ struct Node {
     Node* left;
     Node* right;
     Node* parent;
-
     // Конструктор для узла
     explicit Node(int value) : data(value), color(RED), left(nullptr), right(nullptr), parent(nullptr) {}
 };
@@ -42,8 +24,6 @@ struct Node {
 class RedBlackTree {
 private:
     Node* root;
-
-    // Вспомогательные функции
     void leftRotate(Node* x);
     void rightRotate(Node* x);
     void fixViolation(Node* newNode);
@@ -53,10 +33,8 @@ private:
     std::string getColorString(Color color);
     void inorderHelper(Node* node, std::stringstream& ss, std::string indent, bool last);
 public:
-
     RedBlackTree() : root(nullptr) {}
     Node* getRoot();
-    // Основные функции
     void insert(int value);
     void remove(int value);
     Node * search(int value);
@@ -69,7 +47,7 @@ Node* RedBlackTree::getRoot(){
     return root;
 }
 
-// Левый поворот вокруг узла x
+// Левый поворот
 void RedBlackTree::leftRotate(Node* x) {
     Node* y = x->right;
     x->right = y->left;
@@ -90,7 +68,7 @@ void RedBlackTree::leftRotate(Node* x) {
     x->parent = y;
 }
 
-// Правый поворот вокруг узла x
+// Правый поворот
 void RedBlackTree::rightRotate(Node* x) {
     Node* y = x->left;
     x->left = y->right;
@@ -115,15 +93,12 @@ void RedBlackTree::rightRotate(Node* x) {
 void RedBlackTree::fixViolation(Node* newNode) {
     Node* parent = nullptr;
     Node* grandparent = nullptr;
-
     while (newNode != root && newNode->color != BLACK && newNode->parent->color == RED) {
         parent = newNode->parent;
         grandparent = parent->parent;
-
         // Случай A: Родитель узла левый для деда
         if (parent == grandparent->left) {
             Node* uncle = grandparent->right;
-
             // Случай 1: Дядя узла является красным цветом
             if (uncle != nullptr && uncle->color == RED) {
                 grandparent->color = RED;
@@ -137,7 +112,6 @@ void RedBlackTree::fixViolation(Node* newNode) {
                     newNode = parent;
                     parent = newNode->parent;
                 }
-
                 // Случай 3: Узел является левым дочерним узлом родителя
                 rightRotate(grandparent);
                 std::swap(parent->color, grandparent->color);
@@ -147,7 +121,6 @@ void RedBlackTree::fixViolation(Node* newNode) {
             // Случай B: Родитель узла правый для деда
         else {
             Node* uncle = grandparent->left;
-
             // Случай 1: Дядя узла является красным цветом
             if (uncle != nullptr && uncle->color == RED) {
                 grandparent->color = RED;
@@ -161,7 +134,6 @@ void RedBlackTree::fixViolation(Node* newNode) {
                     newNode = parent;
                     parent = newNode->parent;
                 }
-
                 // Случай 3: Узел является правым дочерним узлом родителя
                 leftRotate(grandparent);
                 std::swap(parent->color, grandparent->color);
@@ -169,7 +141,6 @@ void RedBlackTree::fixViolation(Node* newNode) {
             }
         }
     }
-
     root->color = BLACK;
 }
 
@@ -270,10 +241,8 @@ void RedBlackTree::deleteNode(Node* node) {
 void RedBlackTree::fixDoubleBlack(Node* x) {
     if (x == nullptr || x == root)
         return;
-
     Node* sibling = nullptr;
     bool isLeftChild = false;
-
     while (x != root && x->color == BLACK) {
         if (x == x->parent->left) {
             sibling = x->parent->right;
@@ -282,23 +251,18 @@ void RedBlackTree::fixDoubleBlack(Node* x) {
             sibling = x->parent->left;
             isLeftChild = false;
         }
-
         if (sibling == nullptr)
             return;
-
         // Случай 1: Брат узла является красным
         if (sibling->color == RED) {
             sibling->color = BLACK;
             x->parent->color = RED;
-
             if (isLeftChild)
                 leftRotate(x->parent);
             else
                 rightRotate(x->parent);
-
             sibling = (isLeftChild) ? x->parent->right : x->parent->left;
         }
-
         // Случай 2: Оба ребенка брата являются черными
         if ((sibling->left == nullptr || sibling->left->color == BLACK) &&
             (sibling->right == nullptr || sibling->right->color == BLACK)) {
@@ -321,35 +285,27 @@ void RedBlackTree::fixDoubleBlack(Node* x) {
                     sibling = x->parent->left;
                 }
             }
-
             // Случай 4: Правый ребенок брата является красным
             sibling->color = x->parent->color;
             x->parent->color = BLACK;
-
             if (isLeftChild) {
                 if (sibling->right != nullptr)
                     sibling->right->color = BLACK;
-
                 leftRotate(x->parent);
             } else {
                 if (sibling->left != nullptr)
                     sibling->left->color = BLACK;
-
                 rightRotate(x->parent);
             }
-
             break;
         }
     }
-
     if (x != nullptr)
         x->color = BLACK;
-
     // Дополнительный случай: Отец и брат черные, и у брата нет черных детей
     if (x != nullptr && x->parent != nullptr) {
         Node* parent = x->parent;
         sibling = (parent->left == x) ? parent->right : parent->left;
-
         if (sibling != nullptr && sibling->color == BLACK &&
             ((sibling->left == nullptr || sibling->left->color == BLACK) &&
              (sibling->right == nullptr || sibling->right->color == BLACK))) {
@@ -358,32 +314,24 @@ void RedBlackTree::fixDoubleBlack(Node* x) {
     }
 }
 
-
-
-
-
 // Поиск минимального элемента в поддереве с корнем node
 Node* RedBlackTree::findMinimum(Node* node) {
     while (node->left != nullptr)
         node = node->left;
-
     return node;
 }
 
 // Вставка элемента в красно-черное дерево
 void RedBlackTree::insert(int value) {
     Node* newNode = new Node(value);
-
     if (root == nullptr) {
         root = newNode;
         root->color = BLACK;
     } else {
         Node* current = root;
         Node* parent = nullptr;
-
         while (current != nullptr) {
             parent = current;
-
             if (value < current->data)
                 current = current->left;
             else if (value > current->data)
@@ -394,24 +342,20 @@ void RedBlackTree::insert(int value) {
                 return;
             }
         }
-
         newNode->parent = parent;
-
         if (value < parent->data)
             parent->left = newNode;
         else
             parent->right = newNode;
-
         fixViolation(newNode);
     }
 }
 
+//Поиск элемента дерева
 Node* RedBlackTree::search(int value) {
     if (root == nullptr)
         return nullptr;
-
     Node* node = root;
-
     while (node != nullptr) {
         if (value < node->data)
             node = node->left;
@@ -431,7 +375,6 @@ void RedBlackTree::remove(int value) {
         deleteNode(node);
     }
 }
-
 
 // Вспомогательная функция для рекурсивного обхода дерева в порядке возрастания (inorder)
 void RedBlackTree::inorderHelper(Node* node, std::stringstream& ss, std::string indent, bool last) {
@@ -461,14 +404,14 @@ std::string RedBlackTree::getColorString(Color color) {
     return (color == RED) ? "[R] " : "[B] ";
 }
 
-// Публичная функция для выполнения красивого вывода дерева
+// Публичная функция вывода дерева
 void RedBlackTree::printTree(ofstream& output) {
     std::stringstream ss;
     inorderHelper(root, ss, "", true);
     output << ss.str();
 }
 
-
+//Очищает все дерево
 void RedBlackTree::cleanTree(Node* node) {
     if (node == nullptr)
         return;
@@ -478,6 +421,7 @@ void RedBlackTree::cleanTree(Node* node) {
     delete node;
 }
 
+//Вспомогательная функция для записи в файл
 void RedBlackTree::action(string str, int type, ofstream& output_key, ofstream& output_ans){
     istringstream iss(str); int k;
     while (iss >> k) {
@@ -552,7 +496,6 @@ int main() {
             output_ans << "----------------------------";
             output_key << "----------------------------";
             tree.cleanTree(tree.getRoot());
-
         }
         input_task.close();
         output_ans.close();
